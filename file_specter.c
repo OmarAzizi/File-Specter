@@ -1,5 +1,10 @@
 #include "file_specter.h"
 
+int inotify_fd;
+int inotify_wd;
+
+uint32_t inotify_mask = IN_CREATE | IN_DELETE | IN_ACCESS | IN_CLOSE_WRITE | IN_MODIFY | IN_MOVE_SELF;
+
 char* get_filename_from_path(char* basePath) {
     char* token = strtok(basePath, "/");
     while (token != NULL) { 
@@ -20,31 +25,32 @@ void run_filespecter(char** argv) {
         exit(EXIT_ERROR_BASE_PATH_NULL);
     }
 
-
-    uint32_t inotify_mask = IN_CREATE | IN_DELETE | IN_ACCESS | IN_CLOSE_WRITE | IN_MODIFY | IN_MOVE_SELF;
-
-    int inotify_fd = inotify_init();
+    inotify_fd = inotify_init();
     if (inotify_fd == -1) {
         fprintf(stderr, "ERROR: Cannot Initialize inotify instance.\n");
         exit(EXIT_ERROR_INIT_INOTIFY);
     }
-    
-    int inotify_wd = inotify_add_watch(inotify_fd, argv[1], inotify_mask);
+
+    inotify_wd = inotify_add_watch(inotify_fd, argv[1], inotify_mask);
     if (inotify_wd == -1) {
         fprintf(stderr, "ERROR: Cannot add file to watch instance (file may not exist).\n");
         exit(EXIT_ERROR_FILE_MAY_NOT_EXIST);
     }
 
-    while (true) handle_events(inotify_fd, filename);
+    signal(SIGABRT, signal_handler);
+    signal(SIGINT, signal_handler);
+    signal(SIGTERM, signal_handler);
+
+    while (true) handle_events(filename);
 }
 
-void handle_events(int fd, char* filename) {
+void handle_events(char* filename) {
     printf("Waiting for event....\n");
     char buffer[4096];
     const struct inotify_event* event;
     ssize_t len;
 
-    len = read(fd, buffer, sizeof(buffer)); // reads some events into the buffer
+    len = read(inotify_fd, buffer, sizeof(buffer)); // reads some events into the buffer
                                                     
     if (len == -1) {
         fprintf(stderr, "ERROR: Cannot read from inotify instance\n");
@@ -88,4 +94,16 @@ void notify(char* filename, char* message) {
     }
 
     notify_notification_show(notification, NULL);
+}
+
+void signal_handler(int signal) {
+    printf("\nSignal received, cleaning up...\n");
+    
+    int close_status = inotify_rm_watch(inotify_fd, inotify_wd);
+    if (close_status == -1)
+        fprintf(stderr, "ERROR: Cannot remove the inotify instance\n");
+
+    close(inotify_fd);
+
+    exit(EXIT_SUCCESS);
 }
