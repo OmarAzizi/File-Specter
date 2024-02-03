@@ -8,6 +8,7 @@
 #include <stddef.h>
 #include <string.h>
 #include <unistd.h>
+#include <signal.h>
 
 #include <sys/inotify.h>
 #include <libnotify/notify.h>
@@ -24,8 +25,9 @@
 
 char* get_filename_from_path(char*);
 void run_filespecter(char**);
-void handle_events(int, char*);
+void handle_events(char*);
 void check(const struct inotify_event*, char*);
 void notify(char*, char*);
+void signal_handler(int);
 
 #endif
