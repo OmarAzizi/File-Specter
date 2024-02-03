@@ -1,10 +1,3 @@
-#include <stdint.h>
-#include <stdio.h>
-#include <stdbool.h>
-#include <stdlib.h>
-#include <stddef.h>
-#include <string.h>
-#include <unistd.h>
 #include "file_specter.h"
 
 char* get_filename_from_path(char* basePath) {
@@ -69,14 +62,30 @@ void check(const struct inotify_event* event, char* filename) {
     char* notification;
     notification = NULL;
 
-    if (event->mask & IN_CREATE) notification = "%s have been created.\n";
-	if (event->mask & IN_DELETE) notification = "%s have been deleted.\n";
-	if (event->mask & IN_ACCESS) notification = "%s have been accessed.\n";
-	if (event->mask & IN_CLOSE_WRITE) notification = "%s have been written and closed.\n";
-	if (event->mask & IN_MODIFY) notification = "%s have been modified.\n";
-    if (event->mask & IN_MOVE_SELF) notification = "%s have been moved.\n";
+    if (event->mask & IN_CREATE) notification = "IN_CREATE: File have been created.\n";
+	if (event->mask & IN_DELETE) notification = "IN_DELETE: File have been deleted.\n";
+	if (event->mask & IN_ACCESS) notification = "IN_ACCESS: File have been accessed.\n";
+	if (event->mask & IN_CLOSE_WRITE) notification = "IN_CLOSE_WRITE: File have been written and closed.\n";
+	if (event->mask & IN_MODIFY) notification = "IN_MODIFY: File have been modified.\n";
+    if (event->mask & IN_MOVE_SELF) notification = "IN_MOVE_SELF: File have been moved.\n";
     
     if (notification == NULL) return;
+    notify(filename, notification);
+}
 
-    printf(notification, filename);
+void notify(char* filename, char* message) {
+    bool libnotify_init_status = notify_init("File Specter");
+
+    if (!libnotify_init_status) {
+        fprintf(stderr, "ERROR: Cannot initialize libnotify instance (libnotify may be missing).\n");
+        exit(EXIT_ERROR_INIT_LIBNOTIFY);
+    }
+
+    NotifyNotification* notification = notify_notification_new(filename, message, NULL);
+    if (notification == NULL) {
+        fprintf(stderr, "ERROR: Notification handle was null.\n");
+        return; 
+    }
+
+    notify_notification_show(notification, NULL);
 }
