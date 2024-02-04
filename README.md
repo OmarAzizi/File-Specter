@@ -15,7 +15,7 @@
 The file inspector or as I like to call it **File Specter** is a multithreaded Linux [Daemon](https://en.wikipedia.org/wiki/Daemon_(computing)) that monitors your files and notifies you via desktop notifications if they have been accessed.
 
 ## Demo
-Coming Soon.
+[Screencast from 2024-02-04 21-43-09.webm](https://github.com/OmarAzizi/File-Specter/assets/110500643/661ed9fd-03ed-49ea-88a5-21b8fcb8f871)
 
 ## The Reason Behind It
 The main reason I created this daemon is primarily because I'm trying to teach myself systems-level programming in UNIX-based systems and familiarize myself with the available system libraries and their APIs. So this is probably not the best way I could write a daemon as I'm still learning. Therefore, if you have any suggestions for improvement or if you spot any bugs, you can contribute to this repository or reach out to me, so I can learn from it.
