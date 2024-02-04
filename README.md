@@ -4,7 +4,8 @@
 # Table of Contents 🚨
 1. [About File Specter](#about-file-specter)
 2. [The Reason Behind This](#the-reason-behind-It)
-3. [Daemon Implementation](#daemon-implementation)
+3. [Installation & Usage](#installation-&-usage)
+4. [Daemon Implementation](#daemon-implementation)
     - [Monitoring The Files](#monitoring-the-files)
     - [Multithreading](#multithreading)
     - [Desktop Notifications](#desktop-notifications)
@@ -14,6 +15,21 @@ The file inspector or as I like to call it **File Specter** is a multithreaded L
 
 ## The Reason Behind It
 The main reason I created this daemon is primarily because I'm trying to teach myself systems-level programming in UNIX-based systems and familiarize myself with the available system libraries and their APIs. So this is probably not the best way I could write a daemon as I'm still learning. Therefore, if you have any suggestions for improvement or if you spot any bugs, you can contribute to this repository or reach out to me, so I can learn from it.
+
+## Installation & Usage
+In order to install open the terminal and write:
+```bash
+git clone https://github.com/OmarAzizi/File-Specter.git
+```
+Then change your directory and build the project:
+```bash
+cd File-Specter
+make filespecterd
+```
+To run it properly you need to give it the path to the file you want to monitor, so you need to run it as follows:
+```bash
+./filespecterd <path>
+```
 
 ## Daemon Implementation
 
