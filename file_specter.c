@@ -45,7 +45,6 @@ void run_filespecter(char** argv) {
 }
 
 void handle_events(char* filename) {
-    printf("Waiting for event....\n");
     char buffer[4096];
     const struct inotify_event* event;
     char* notification = NULL;
