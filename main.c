@@ -1,5 +1,3 @@
-#include <stdio.h>
-#include <stdlib.h>
 #include "file_specter.h"
 
 int main(int argc, char** argv) {
