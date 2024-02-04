@@ -28,7 +28,7 @@ git clone https://github.com/OmarAzizi/File-Specter.git
 Then change your directory and build the project:
 ```bash
 cd File-Specter
-make filespecterd
+make filespecter
 ```
 To run it properly you need to give it the path to the file you want to monitor, so you need to run it as follows:
 ```bash
