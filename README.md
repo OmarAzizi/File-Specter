@@ -40,7 +40,7 @@ To run it properly you need to give it the path to the file you want to monitor,
 To monitor the files I used the [inotify API](https://man7.org/linux/man-pages/man7/inotify.7.html), which provides a mechanism for monitoring filesystem events.
 
 ### Multithreading
-I used threads in the daemon so that instead of doing the work sequentially, it can monitor the file and report any changes or access to it on different threads. Therefore, they run in parallel and they wont wait for each other to finish executing inorder to run. To get that done, I used the [POSIX threads (Pthreads)](https://man7.org/linux/man-pages/man7/pthreads.7.html);
+I used threads in the daemon so that instead of doing the work sequentially, it can monitor the file and report any changes or access to it on different threads. Therefore, they run in parallel and they wont wait for each other to finish executing inorder to run. To get that done, I used the [POSIX threads (Pthreads)](https://man7.org/linux/man-pages/man7/pthreads.7.html).
 
 ### Desktop Notifications
 To show the user that his file has been accessed, instead of printing it to the **syslog**, I used the [libnotify](https://developer-old.gnome.org/libnotify/unstable/ch01.html) notification API to do that in real-time.
