@@ -3,15 +3,19 @@
 
 # Table of Contents 🚨
 1. [About File Specter](#about-file-specter)
-2. [The Reason Behind This](#the-reason-behind-It)
-3. [Installation & Usage](#installation-&-usage)
-4. [Daemon Implementation](#daemon-implementation)
+2. [Demo](#demo)
+3. [The Reason Behind This](#the-reason-behind-It)
+4. [Installation & Usage](#installation--usage)
+5. [Daemon Implementation](#daemon-implementation)
     - [Monitoring The Files](#monitoring-the-files)
     - [Multithreading](#multithreading)
     - [Desktop Notifications](#desktop-notifications)
+
 ## About File Specter
 The file inspector or as I like to call it **File Specter** is a multithreaded Linux [Daemon](https://en.wikipedia.org/wiki/Daemon_(computing)) that monitors your files and notifies you via desktop notifications if they have been accessed.
 
+## Demo
+Coming Soon.
 
 ## The Reason Behind It
 The main reason I created this daemon is primarily because I'm trying to teach myself systems-level programming in UNIX-based systems and familiarize myself with the available system libraries and their APIs. So this is probably not the best way I could write a daemon as I'm still learning. Therefore, if you have any suggestions for improvement or if you spot any bugs, you can contribute to this repository or reach out to me, so I can learn from it.
@@ -32,7 +36,6 @@ To run it properly you need to give it the path to the file you want to monitor,
 ```
 
 ## Daemon Implementation
-
 ### Monitoring The Files
 To monitor the files I used the [inotify API](https://man7.org/linux/man-pages/man7/inotify.7.html), which provides a mechanism for monitoring filesystem events.
 
