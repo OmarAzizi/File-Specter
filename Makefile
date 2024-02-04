@@ -11,7 +11,7 @@ CC = gcc
 LIBNOTIFY_THINGY = `pkg-config --cflags --libs libnotify` 
 
 filespecter: filespecter.o main.o
-	$(CC) filespecter.o main.o -o filespecterd $(LIBNOTIFY_THINGY)
+	$(CC) filespecter.o main.o -o filespecterd $(LIBNOTIFY_THINGY) # if you are making a daemon you should put  'd' at the end of the name
 
 filespecter.o: file_specter.c
 	$(CC) -c file_specter.c -o filespecter.o $(LIBNOTIFY_THINGY)
