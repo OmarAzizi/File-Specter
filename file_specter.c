@@ -1,4 +1,5 @@
 #include "file_specter.h"
+#include <string.h>
 
 int inotify_fd;
 int inotify_wd;
@@ -48,7 +49,11 @@ void handle_events(char* filename) {
     printf("Waiting for event....\n");
     char buffer[4096];
     const struct inotify_event* event;
+    char* notification = NULL;
     ssize_t len;
+    
+    char message[100];
+    char* args[] = {filename, message};
 
     len = read(inotify_fd, buffer, sizeof(buffer)); // reads some events into the buffer
                                                     
@@ -56,41 +61,58 @@ void handle_events(char* filename) {
         fprintf(stderr, "ERROR: Cannot read from inotify instance\n");
         exit(EXIT_ERROR_READ_INOTIFY);
     }
+    
+    pthread_attr_t attr;
+    pthread_t notify_function_thread;
+    
+    int thread_status = pthread_attr_init(&attr);
+    if (thread_status != 0) {
+        fprintf(stderr, "ERROR: Cannot initialize thread attributes.\n");
+        exit(THREAD_ERROR);
+    }
 
+    thread_status = pthread_create(&notify_function_thread, &attr, &notify, (void*)args);
+    if (thread_status != 0) {
+        fprintf(stderr, "ERROR: Cannot create pthread instance.\n");
+        exit(THREAD_ERROR);
+    }
+    
     /* Loop over all events in the buffer. */
     for (char* ptr = buffer; ptr < buffer + len; ptr += sizeof(struct inotify_event) + event->len) {
         event = (const struct inotify_event*)ptr;
-        check(event, filename);
+        
+        notification = NULL;
+        if (event->mask & IN_CREATE) notification = "IN_CREATE: File have been created.\n";
+        if (event->mask & IN_DELETE) notification = "IN_DELETE: File have been deleted.\n";
+        if (event->mask & IN_ACCESS) notification = "IN_ACCESS: File have been accessed.\n";
+        if (event->mask & IN_CLOSE_WRITE) notification = "IN_CLOSE_WRITE: File have been written and closed.\n";
+        if (event->mask & IN_MODIFY) notification = "IN_MODIFY: File have been modified.\n";
+        if (event->mask & IN_MOVE_SELF) notification = "IN_MOVE_SELF: File have been moved.\n";
+        
+        if (notification == NULL) continue;
+
+        if (strlen(notification) > 100) {
+            fprintf(stderr, "ERROR: Buffer Overflow detected.");
+            exit(EXIT_ERROR_BUFFER_OVERFLOW);
+        }
+
+        strcpy(message, notification);
     }
 }
 
-void check(const struct inotify_event* event, char* filename) {
-    char* notification;
-    notification = NULL;
-
-    if (event->mask & IN_CREATE) notification = "IN_CREATE: File have been created.\n";
-	if (event->mask & IN_DELETE) notification = "IN_DELETE: File have been deleted.\n";
-	if (event->mask & IN_ACCESS) notification = "IN_ACCESS: File have been accessed.\n";
-	if (event->mask & IN_CLOSE_WRITE) notification = "IN_CLOSE_WRITE: File have been written and closed.\n";
-	if (event->mask & IN_MODIFY) notification = "IN_MODIFY: File have been modified.\n";
-    if (event->mask & IN_MOVE_SELF) notification = "IN_MOVE_SELF: File have been moved.\n";
-    
-    if (notification == NULL) return;
-    notify(filename, notification);
-}
-
-void notify(char* filename, char* message) {
+void* notify(void* args) {
+    char** charArgs = (char**)args;
     bool libnotify_init_status = notify_init("File Specter");
-
+    
     if (!libnotify_init_status) {
         fprintf(stderr, "ERROR: Cannot initialize libnotify instance (libnotify may be missing).\n");
         exit(EXIT_ERROR_INIT_LIBNOTIFY);
     }
 
-    NotifyNotification* notification = notify_notification_new(filename, message, NULL);
+    NotifyNotification* notification = notify_notification_new(charArgs[0], charArgs[1], NULL);
     if (notification == NULL) {
         fprintf(stderr, "ERROR: Notification handle was null.\n");
-        return; 
+        return NULL; 
     }
 
     notify_notification_show(notification, NULL);
