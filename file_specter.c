@@ -1,5 +1,4 @@
 #include "file_specter.h"
-#include <string.h>
 
 int inotify_fd;
 int inotify_wd;
