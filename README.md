@@ -7,6 +7,7 @@
 3. [Daemon Implementation](#daemon-implementation)
     - [Monitoring The Files](#monitoring-the-files)
     - [Multithreading](#multithreading)
+    - [Desktop Notifications](#desktop-notifications)
 ## About File Specter
 The file inspector or as I like to call it **File Specter** is a multithreaded Linux [Daemon](https://en.wikipedia.org/wiki/Daemon_(computing)) that monitors your files and notifies you via desktop notifications if they have been accessed.
 
@@ -21,3 +22,6 @@ To monitor the files I used the [inotify API](https://man7.org/linux/man-pages/m
 
 ### Multithreading
 I used threads in the daemon so that instead of doing the work sequentially, it can monitor the file and report any changes or access to it on different threads. Therefore, they run in parallel and they wont wait for each other to finish executing inorder to run. To get that done, I used the [POSIX threads (Pthreads)](https://man7.org/linux/man-pages/man7/pthreads.7.html);
+
+### Desktop Notifications
+To show the user that his file has been accessed, instead of printing it to the **syslog**, I used the [libnotify](https://developer-old.gnome.org/libnotify/unstable/ch01.html) notification API to do that in real-time.
