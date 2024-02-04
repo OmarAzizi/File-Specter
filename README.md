@@ -1,2 +1,2 @@
 # Flie Specter
-A linux daemon that keeps track of your files.
+A linux daemon that monitors your files.
