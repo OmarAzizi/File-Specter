@@ -1,7 +1,9 @@
 # Flie Specter
-[![Language: C](https://img.shields.io/badge/Language-C-blue.svg)](https://en.wikipedia.org/wiki/C_(programming_language))
-[![Built with Pthreads](https://img.shields.io/badge/Built%20with-Pthreads-blue.svg)](https://en.wikipedia.org/wiki/POSIX_Threads)
-[![Uses inotify](https://img.shields.io/badge/Uses%20inotify-orange.svg)](https://en.wikipedia.org/wiki/Inotify)
+![C Icon](https://img.shields.io/badge/language-C-blue?style=for-the-badge&logo=c)
 
+# Table of Contents 🚨
+1. [About](#about-file-specter)
 
-A linux daemon that monitors your files.
+## About File Specter
+File Specter is a multithreaded Linux daemon that monitors your files and notifies you via desktop notifications if they have been accessed. The purpose of creating this daemon is primarily me trying to teach myself system-level programming in UNIX-based systems and familiarize myself with the available system libraries and their APIs.
+
