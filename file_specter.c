@@ -117,8 +117,6 @@ void* notify(void* args) {
 }
 
 void signal_handler(int signal) {
-    printf("\nSignal received, cleaning up...\n");
-    
     int close_status = inotify_rm_watch(inotify_fd, inotify_wd);
     if (close_status == -1)
         fprintf(stderr, "ERROR: Cannot remove the inotify instance\n");
