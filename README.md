@@ -16,7 +16,7 @@ The main reason I created this daemon is primarily because I'm trying to teach m
 
 ## Daemon Implementation
 
-### Monitoring The File
+### Monitoring The Files
 To monitor the files I used the [inotify API](https://man7.org/linux/man-pages/man7/inotify.7.html), which provides a mechanism for monitoring filesystem events.
 
 ### Multithreading
