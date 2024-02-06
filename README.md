@@ -1,5 +1,5 @@
 # Flie Specter ⛓️
-![C](https://img.shields.io/badge/c-%2300599C.svg?style=for-the-badge&logo=c&logoColor=white)
+![C Icon](https://img.shields.io/badge/language-C-blue?style=for-the-badge&logo=c)
 
 # Table of Contents 📍
 1. [About File Specter](#about-file-specter)
