@@ -1,7 +1,6 @@
 # Flie Specter ⛓️
 ![C Icon](https://img.shields.io/badge/language-C-blue?style=for-the-badge&logo=c)
 
-# Table of Contents 📍
 1. [About File Specter](#about-file-specter)
 2. [Demo](#demo)
 3. [The Reason Behind This](#the-reason-behind-It)
